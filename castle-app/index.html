@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0b0f14" />
+  <title>The Castle</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@400;600;700&family=Roboto+Condensed:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Leaflet (for experimental map2 screen) -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
+  <script defer src="js/app.js"></script>
+</head>
+<body>
+  <!-- Status bar (hidden in Screenshot Mode) -->
+  <div class="statusbar" role="presentation">
+    <div class="statusbar__time" id="clock" aria-hidden="true">12:00</div>
+    <div class="statusbar__icons" aria-hidden="true">
+      <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+    </div>
+  </div>
+
+  <header class="app-head" role="banner">
+    <img class="logo" src="assets/logo-shield.svg" alt="The Castle shield logo" />
+    <div class="brand">
+      <h1 class="brand__title">The Castle</h1>
+      <p class="brand__tag"><span class="status status--ok"><svg class="brand__shield brand__shield--solid" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"></path><path fill="currentColor" d="M9 12l2 2 4-4 1.4 1.4L11 16 7.6 12.6 9 11z"></path></svg> ENCRYPTED</span></p>
+    </div>
+  </header>
+
+  <main id="app" class="app" role="main">
+    <!-- Dashboard -->
+    <section id="dashboard" class="screen active" aria-labelledby="dash-title">
+      <h2 id="dash-title" class="sr-only">Dashboard</h2>
+      <div class="menu">
+        <a class="tile" href="#manual" aria-disabled="true" role="link" tabindex="0">
+          <div class="tile__icon"><i data-lucide="shield"></i></div>
+          <div class="tile__label">Manual for Emergency Preparedness</div>
+        </a>
+        <a class="tile" href="#calendar" aria-disabled="true" role="link" tabindex="0">
+          <div class="tile__icon"><i data-lucide="calendar"></i></div>
+          <div class="tile__label">Calendar of Events</div>
+        </a>
+        <a class="tile" href="#deeds" aria-disabled="true" role="link" tabindex="0">
+          <div class="tile__icon"><i data-lucide="thumbs-up"></i></div>
+          <div class="tile__label">Good Deeds and Initiatives</div>
+        </a>
+        <a class="tile" href="#manifesto">
+          <div class="tile__icon"><i data-lucide="scroll-text"></i></div>
+          <div class="tile__label">Manifesto of Guiding Principles</div>
+          <span class="pill pill--new" aria-label="New">NEW</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- Hunting Map -->
+    <section id="map2" class="screen" aria-labelledby="map2-title">
+      <header class="section-head">
+        <h2 id="map-title">Operations Map</h2>
+        <p class="section-sub">Field Intel — Eyes Only</p>
+      </header>
+      <!-- Data source for markers (reuse attributes as in map) -->
+      <div class="sr-only" aria-hidden="true">
+        <button class="target" data-x="62" data-y="44" aria-label="Sheriff Callahan" data-title="Sheriff Callahan" data-address="325 Colton Rd" data-work="County Sheriff" data-notes="Keeps irregular hours."></button>
+        <button class="target" data-x="38" data-y="63" aria-label="Mayor O’Connell" data-title="Mayor O’Connell" data-address="3540 Maple Ave" data-work="City Hall" data-notes="Security detail Mon–Fri."></button>
+      </div>
+      <div id="leaflet-map" style="height: 420px; border-radius: 10px; overflow: hidden;"></div>
+      <div class="section-actions">
+        <a class="button" href="#dashboard">Back</a>
+      </div>
+    </section>
+
+    <!-- Manifesto -->
+    <section id="manifesto" class="screen" aria-labelledby="manifesto-title">
+      <header class="section-head">
+        <h2 id="manifesto-title">Manifesto of Guiding Principles</h2>
+        <p class="section-sub">What it means to be a Minuteman 21</p>
+      </header>
+      <article class="scroll-copy" aria-label="Manifesto">
+        <ul class="manifesto-list">
+          <li>Self-Reliance Above All</li>
+          <li>Defense of Family and Kin</li>
+          <li>Preparedness Is Patriotism</li>
+          <li>Silence Is Weakness</li>
+          <li>Honor, Discipline, Resolve</li>
+          <li>Stand for Those Who Cannot</li>
+          <li>Work Hard. Train Harder.</li>
+          <li>Guard the Gate. Guard Your Word.</li>
+        </ul>
+      </article>
+      <div class="section-actions">
+        <a class="button" href="#dashboard">Back</a>
+      </div>
+    </section>
+
+    <!-- Hunting Map removed
+    <section id="map" class="screen" aria-labelledby="map-title">
+      <header class="section-head">
+        <h2 id="map-title">Operations Map</h2>
+        <p class="section-sub">Field Intel — Eyes Only</p>
+      </header>
+      <div class="map-wrap">
+        <img class="map-image" src="assets/map-area.png" alt="Operations map background" />
+        <div class="targets">
+          <button class="target" style="--x:62%; --y:44%;" aria-label="Sheriff Callahan" data-title="Sheriff Callahan" data-address="325 Colton Rd" data-work="County Sheriff" data-notes="Keeps irregular hours.">
+            <span class="dot" aria-hidden="true"></span>
+          </button>
+          <button class="target" style="--x:38%; --y:63%;" aria-label="Mayor O’Connell" data-title="Mayor O’Connell" data-address="3540 Maple Ave" data-work="City Hall" data-notes="Security detail Mon–Fri.">
+            <span class="dot" aria-hidden="true"></span>
+          </button>
+        </div>
+        <div class="hud reticle" aria-hidden="true"></div>
+        <div id="popover" class="popover" role="dialog" aria-modal="false" aria-hidden="true">
+          <div class="popover__arrow" aria-hidden="true"></div>
+          <div class="popover__header" id="popover-title"></div>
+          <div class="popover__body" id="popover-body"></div>
+        </div>
+      </div>
+      <div class="section-actions">
+        <a class="button" href="#dashboard">Back</a>
+      </div>
+    </section>-->
+
+    <!-- Messages -->
+    <section id="messages" class="screen" aria-labelledby="messages-title">
+      <header class="section-head">
+        <h2 id="messages-title">Messages</h2>
+        <p class="section-sub">Secure Channel</p>
+      </header>
+      <ol class="chat" id="chat" aria-live="polite">
+        <li class="msg from-jimmy"><span class="from">Jimmy</span><span class="text">Send me that video. Pronto!</span></li>
+        <li class="msg from-clay"><span class="from">Clay</span><span class="text">Yo, what’s happening?</span></li>
+        <li class="msg from-sharkey"><span class="from">Sharkey</span><span class="text">Answer your phone.</span></li>
+        <li class="msg from-chad urgent"><span class="from">Chad</span><span class="text"><svg class="msg__icon msg__icon--solid" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 2 22 20H2L12 2z"/><rect x="11" y="9" width="2" height="6" rx="1" ry="1" fill="var(--color-surface)"/><circle cx="12" cy="17" r="1.4" fill="var(--color-surface)"/></svg>We need to talk. Now.</span></li>
+      </ol>
+      <div class="section-actions">
+        <a class="button" href="#dashboard">Back</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Bottom utility nav (hidden in Screenshot Mode) -->
+  <nav class="bottom-nav" aria-label="Primary">
+    <a href="#dashboard" class="navbtn" data-nav="dashboard" aria-label="Home"><i data-lucide="home"></i></a>    <a href="#map2" class="navbtn" data-nav="map2" aria-label="Map 2"><i data-lucide="map"></i></a>
+    <a href="#messages" class="navbtn" data-nav="messages" aria-label="Messages"><i data-lucide="message-square"></i></a>
+  </nav>
+  <!-- Bottom frame bezel to visually frame the app -->
+  <div class="bottom-frame" aria-hidden="true"></div>
+</body>
+</html>

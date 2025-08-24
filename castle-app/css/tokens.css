@@ -1,0 +1,42 @@
+:root {
+  /* Colors */
+  --color-bg: #0b0f14;
+  --color-surface: #10151b;
+  --color-text: #e8e6e3;
+  --color-muted: #9ea7b3;
+  --color-line: #27313d;
+  --color-accent: #c23b3b; /* ominous red */
+  --color-ok: #5bb98c;
+  /* Vibrant success green for solid icons and emphasis */
+  --color-ok-strong: #22c55e;
+  /* Deep success green for accessible tag backgrounds */
+  --color-ok-deep: #166534;
+
+  /* Type */
+  --font-sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
+  --font-serif: ui-serif, Georgia, "Times New Roman", Times, serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-heading: "Oswald", "Roboto Condensed", var(--font-sans);
+  --font-brand: "Anton", "Collegiate", var(--font-sans);
+
+  /* Spacing (4pt grid) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+
+  /* Radius */
+  --radius-1: 6px;
+  --radius-2: 10px;
+  --radius-3: 16px;
+
+  /* Shadow */
+  --shadow-1: 0 6px 18px rgba(0,0,0,0.45);
+
+  /* Sizing */
+  --max-content: 480px;
+  --nav-height: 64px;
+  --frame-height: 16px;
+}

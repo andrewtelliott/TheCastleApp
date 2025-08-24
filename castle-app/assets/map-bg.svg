@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" width="1200" height="720" role="img" aria-label="Static operations map">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0a0e13"/>
+      <stop offset="100%" stop-color="#0e141b"/>
+    </linearGradient>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M 48 0 L 0 0 0 48" fill="none" stroke="#2a3440" stroke-width="1" opacity="0.24"/>
+    </pattern>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer>
+        <feFuncA type="table" tableValues="0 0 0.02 0.06"/>
+      </feComponentTransfer>
+      <feBlend mode="overlay" in2="SourceGraphic"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="720" fill="url(#bg)"/>
+  <rect width="1200" height="720" fill="url(#grid)"/>
+
+  <!-- Water bodies -->
+  <path d="M-50,200 C200,150 250,300 420,280 C600,260 700,200 900,220 C1100,240 1250,180 1250,180 L1250,260 C1100,320 980,300 880,300 C760,300 640,340 520,340 C420,340 300,320 140,360 C20,390 -50,420 -50,420 Z" fill="#0b1720" opacity="0.5"/>
+
+  <!-- Major roads -->
+  <g stroke="#1c2631" stroke-width="3" opacity="0.9">
+    <path d="M50,650 L300,500 520,540 760,420 1120,520" fill="none"/>
+    <path d="M100,120 L260,200 340,340 480,420 700,380 980,260 1180,300" fill="none"/>
+  </g>
+  <!-- Minor roads -->
+  <g stroke="#24303c" stroke-width="2" opacity="0.6">
+    <path d="M250,520 L240,440 300,380 420,360 560,400 740,360 900,420" fill="none"/>
+    <path d="M180,260 L260,260 320,300 400,300 500,280 620,300 740,280 880,240" fill="none"/>
+    <path d="M340,600 L420,560 500,560 620,520 760,500 920,520" fill="none"/>
+  </g>
+
+  <!-- Urban clusters -->
+  <g fill="#131a22">
+    <circle cx="300" cy="500" r="36"/>
+    <circle cx="760" cy="420" r="30"/>
+    <circle cx="980" cy="260" r="28"/>
+    <circle cx="520" cy="540" r="22"/>
+  </g>
+
+  <!-- Elevation hints -->
+  <g fill="none" stroke="#131b22" opacity="0.4">
+    <path d="M100,700 C220,600 340,600 460,580 C600,560 760,560 940,600 C1080,630 1160,650 1220,640"/>
+    <path d="M-20,520 C160,520 280,500 420,500 C560,500 720,520 900,540 C1040,560 1200,560 1280,540"/>
+  </g>
+
+  <!-- Vignette grain for texture -->
+  <rect width="1200" height="720" fill="#000" opacity="0.18"/>
+  <rect width="1200" height="720" fill="#000" opacity="0.06" filter="url(#grain)"/>
+</svg>

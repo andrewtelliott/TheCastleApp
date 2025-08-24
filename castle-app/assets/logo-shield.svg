@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Shield logo">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#18212b"/>
+      <stop offset="1" stop-color="#0d141b"/>
+    </linearGradient>
+  </defs>
+  <!-- Shield base -->
+  <path d="M32 4 L54 10 L54 30 C54 42 44 52 32 58 C20 52 10 42 10 30 L10 10 L32 4 Z" fill="url(#g)" stroke="#27313d" stroke-width="2"/>
+  <!-- Flag stripes right -->
+  <rect x="36" y="14" width="12" height="3" fill="#c23b3b"/>
+  <rect x="36" y="20" width="12" height="3" fill="#c23b3b"/>
+  <rect x="36" y="26" width="12" height="3" fill="#c23b3b"/>
+  <rect x="36" y="32" width="12" height="3" fill="#c23b3b"/>
+  <!-- Left field -->
+  <rect x="14" y="14" width="18" height="21" fill="#10151b" stroke="#27313d" stroke-width="1"/>
+  <circle cx="20" cy="20" r="2" fill="#e8e6e3"/>
+  <circle cx="26" cy="20" r="2" fill="#e8e6e3"/>
+  <circle cx="20" cy="26" r="2" fill="#e8e6e3"/>
+  <circle cx="26" cy="26" r="2" fill="#e8e6e3"/>
+</svg>
