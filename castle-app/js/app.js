@@ -236,13 +236,14 @@
         row('sticky-note', notes),
       ].join('');
       pop.setAttribute('aria-hidden', 'false');
-      place(btn);
       openFor = btn;
       openMode = mode || 'click';
-      // Refresh Lucide icons inside popover
+      // Refresh Lucide icons inside popover BEFORE measuring, then place using
+      // the final rendered size to avoid visual drift in vertical spacing.
       if (window.lucide && typeof window.lucide.createIcons === 'function') {
         window.lucide.createIcons();
       }
+      place(btn);
     }
 
     function close() {
