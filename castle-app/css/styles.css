@@ -21,7 +21,7 @@ body {
 
 /* Header */
 .app-head { max-width: var(--max-content); margin: 0 auto; display:flex; align-items:center; gap: var(--space-3); padding: var(--space-2) var(--space-4); }
-.logo { width: 40px; height: 40px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4)); }
+.logo { width: auto; height: 48px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4)); }
 .brand { display:flex; align-items:center; flex-direction:row; width:100%; justify-content: space-between; gap: var(--space-2); }
 .brand__title { margin: 0; font-size: 1.25rem; letter-spacing: .06em; text-transform: uppercase; font-family: var(--font-brand); font-weight: 700; }
 .brand__tag { margin: 0; color: var(--color-muted); font-family: var(--font-mono); font-size: .8rem; letter-spacing: .08em; display:flex; align-items:center; gap:6px; }
