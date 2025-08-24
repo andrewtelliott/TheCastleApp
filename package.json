@@ -4,10 +4,15 @@
   "private": true,
   "type": "commonjs",
   "scripts": {
+    "start": "npm run serve",
+    "serve": "http-server castle-app -p 5173 -c-1",
+    "build": "rm -rf dist && mkdir -p dist && cp -R castle-app/* dist",
+    "preview": "http-server dist -p 5174 -c-1",
     "test": "jest --runInBand",
     "test:watch": "jest --watch"
   },
   "devDependencies": {
+    "http-server": "^14.1.1",
     "jest": "29.7.0",
     "jsdom": "22.1.0",
     "jest-environment-jsdom": "29.7.0"

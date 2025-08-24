@@ -65,14 +65,16 @@ body {
 .section-actions { margin-top: var(--space-4); }
 
 /* Menu tiles */
-.menu { display:grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); margin-top: var(--space-2); }
-.tile { position: relative; display:flex; flex-direction:column; gap: var(--space-2); padding: var(--space-4); background: var(--color-surface); border: 1px solid var(--color-line); border-radius: var(--radius-2); text-decoration:none; color:inherit; box-shadow: var(--shadow-1); min-height: 120px; }
+.menu { display:flex; flex-direction: column; gap: var(--space-2); margin-top: var(--space-2); }
+.tile { position: relative; display:flex; flex-direction: row; align-items: center; gap: var(--space-3); padding: 10px 6px; background: transparent; border: none; border-radius: var(--radius-1); text-decoration:none; color: var(--color-text); box-shadow: none; min-height: auto; }
 .tile:focus { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+.tile:hover { background: color-mix(in srgb, var(--color-surface) 55%, transparent); }
 .tile__icon { font-size: 1.5rem; }
-.tile__icon svg { width: 22px; height: 22px; stroke: var(--color-text); }
-.tile__label { font-weight: 600; letter-spacing: .02em; }
-.tile[aria-disabled="true"] { opacity: .5; cursor: not-allowed; }
-.pill { position: absolute; top: 8px; right: 8px; padding: 2px 8px; border-radius: 999px; font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.tile__icon svg { width: 28px; height: 28px; stroke: var(--color-text); }
+.tile__label { font-weight: 700; font-size: 1rem; letter-spacing: .02em; }
+/* Home menu shows every link as available */
+#dashboard .tile[aria-disabled="true"] { opacity: 1; cursor: pointer; }
+.pill { position: absolute; top: 50%; right: 8px; transform: translateY(-50%); padding: 2px 8px; border-radius: 999px; font-size: .7rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
 .pill--new { background: var(--color-accent); color: #fff; }
 
 /* Buttons */
@@ -106,7 +108,7 @@ body {
 .popover__header { font-weight: 700; margin-bottom: 6px; letter-spacing: .02em; }
 .popover__body { color: var(--color-muted); font-size: .9rem; display:flex; flex-direction: column; gap: 6px; }
 .popover__row { display:flex; align-items:center; gap: 8px; }
-.popover__row i svg { width: 16px; height: 16px; stroke: var(--color-muted); }
+.popover__row svg { width: 16px; height: 16px; stroke: var(--color-muted); }
 .popover__row span { font-family: var(--font-mono); }
 .popover__arrow { position: absolute; width: 12px; height: 12px; background: var(--color-surface); border-left: 1px solid var(--color-line); border-top: 1px solid var(--color-line); transform: rotate(45deg); }
 .popover[data-placement="top"] .popover__arrow { bottom: -6px; left: 50%; transform: translateX(-50%) rotate(45deg); }
@@ -117,24 +119,25 @@ body {
 #map2 .leaflet-container { overflow: hidden; }
 #map2 .leaflet-shadow-pane { display: none; }
 #map2 .leaflet-popup-pane { z-index: 700; }
+/* Darken the base imagery to boost target contrast */
+#map2 .leaflet-overlay-pane img { filter: brightness(0.62) contrast(1.15) saturate(0.78); }
+/* Subtle vignette for focus without obscuring center */
+#map2 #leaflet-map::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(80% 70% at 50% 50%, rgba(0,0,0,0) 55%, rgba(0,0,0,.35) 100%); }
 
 /* Dark-mode popup skin to match app popover */
 .leaflet-popover .leaflet-popup-content-wrapper {
   background: var(--color-surface);
   color: var(--color-text);
-  border: 1px solid var(--color-line);
-  border-radius: var(--radius-2);
-  box-shadow: var(--shadow-1);
 }
-.leaflet-popover .leaflet-popup-content { margin: 10px 12px; }
+.leaflet-popover .leaflet-popup-content { margin: 0; }
 .leaflet-popover .leaflet-popup-tip { background: var(--color-surface); box-shadow: 0 0 0 1px var(--color-line); }
-.leaflet-popover .leaflet-popup-close-button { color: var(--color-muted); }
+.leaflet-popover .leaflet-popup-close-button { display:none; color: var(--color-muted); }
 
 /* Use existing popover content tokens inside Leaflet popup */
 .leaflet-popover .popover__header { font-weight: 700; margin-bottom: 6px; letter-spacing: .02em; }
-.leaflet-popover .popover__body { color: var(--color-muted); font-size: .9rem; display:flex; flex-direction: column; gap: 6px; }
+.leaflet-popover .popover__body { color: var(--color-muted); font-size: .9em; display:flex; flex-direction: column; gap: 6px; }
 .leaflet-popover .popover__row { display:flex; align-items:center; gap: 8px; }
-.leaflet-popover .popover__row i svg { width: 16px; height: 16px; stroke: var(--color-muted); }
+.leaflet-popover .popover__row svg { width: 16px; height: 16px; stroke: var(--color-muted); }
 .leaflet-popover .popover__row span { font-family: var(--font-mono); }
 
 /* Map2 markers: ring-only target (no fill), heavier stroke for noisy backgrounds */
