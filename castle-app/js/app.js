@@ -153,19 +153,91 @@
         ].join('');
 
         const marker = L.marker([y, x], { keyboard: true, title, icon: dotIcon });
-        marker.addTo(map).bindPopup(content, {
-          className: 'popover leaflet-popover',
-          autoPan: true,
-          autoPanPadding: [36, 36],
-          closeButton: true,
-          autoClose: true
+        
+        // Store marker data for Floating UI popover
+        marker._popoverData = { title, address, work, notes };
+        
+        // Add click handler for custom popover
+        marker.on('click', function(e) {
+          showFloatingPopover(this, this._popoverData);
         });
+        
+        marker.addTo(map);
       });
 
-      // Enhance icons inside popups when they open
-      map.on('popupopen', () => {
+      // Global popover elements
+      const popover = document.getElementById('map-popover');
+      const popoverTitle = document.getElementById('map-popover-title');
+      const popoverBody = document.getElementById('map-popover-body');
+      const popoverArrow = popover.querySelector('.popover__arrow');
+      let currentPopoverTarget = null;
+      
+      // Floating UI popover system
+      function showFloatingPopover(marker, data) {
+        // Get marker DOM element and map container
+        const markerElement = marker._icon;
+        const mapContainer = document.getElementById('leaflet-map');
+        if (!markerElement || !mapContainer) return;
+        
+        // Populate popover content
+        popoverTitle.textContent = data.title;
+        const rows = [];
+        if (data.address) rows.push(`<div class="popover__row"><i data-lucide="home" aria-hidden="true"></i><span>${data.address}</span></div>`);
+        if (data.work) rows.push(`<div class="popover__row"><i data-lucide="briefcase" aria-hidden="true"></i><span>${data.work}</span></div>`);
+        popoverBody.innerHTML = rows.join('');
+        
+        // Show popover and append to map container for proper positioning context
+        popover.setAttribute('aria-hidden', 'false');
+        if (popover.parentNode !== mapContainer) {
+          mapContainer.appendChild(popover);
+        }
+        currentPopoverTarget = markerElement;
+        
+        // Get marker position relative to map container
+        const mapRect = mapContainer.getBoundingClientRect();
+        const markerRect = markerElement.getBoundingClientRect();
+        
+        // Calculate marker position within map container
+        const markerX = markerRect.left - mapRect.left + (markerRect.width / 2);
+        const markerY = markerRect.top - mapRect.top;
+        
+        // Position popover above marker with 24px gap
+        const popoverRect = popover.getBoundingClientRect();
+        const popoverX = markerX - (popoverRect.width / 2);
+        const popoverY = markerY - popoverRect.height - 24;
+        
+        // Clamp to map boundaries
+        const clampedX = Math.max(16, Math.min(popoverX, mapRect.width - popoverRect.width - 16));
+        const clampedY = Math.max(16, Math.min(popoverY, mapRect.height - popoverRect.height - 16));
+        
+        // Position popover
+        Object.assign(popover.style, {
+          left: `${clampedX}px`,
+          top: `${clampedY}px`
+        });
+        
+        // Position arrow to point at marker center
+        const arrowX = markerX - clampedX - 6; // 6px is half arrow width
+        Object.assign(popoverArrow.style, {
+          left: `${Math.max(6, Math.min(arrowX, popoverRect.width - 18))}px`,
+          top: '',
+          right: '',
+          bottom: '-6px'
+        });
+        
+        popover.dataset.placement = 'top';
+        
+        // Enhance Lucide icons
         if (window.lucide && typeof window.lucide.createIcons === 'function') {
           window.lucide.createIcons();
+        }
+      }
+      
+      // Hide popover when clicking outside
+      document.addEventListener('click', (e) => {
+        if (currentPopoverTarget && !popover.contains(e.target) && !currentPopoverTarget.contains(e.target)) {
+          popover.setAttribute('aria-hidden', 'true');
+          currentPopoverTarget = null;
         }
       });
 
@@ -200,22 +272,79 @@
     function place(btn) {
       const wrapRect = wrap.getBoundingClientRect();
       const btnRect = btn.getBoundingClientRect();
-      // Prefer top placement when there's room above
-      const centerX = btnRect.left + (btnRect.width / 2) - wrapRect.left;
-      const preferTop = (btnRect.top - wrapRect.top) > (wrapRect.height / 2);
+      
       // Make visible to read offsetHeight
       pop.style.visibility = 'hidden';
       pop.style.display = 'block';
       const pw = pop.offsetWidth;
       const ph = pop.offsetHeight;
       const gap = 12;
-      const left = Math.min(Math.max(centerX - pw / 2, 8), wrapRect.width - pw - 8);
-      const top = preferTop
-        ? (btnRect.top - wrapRect.top) - ph - gap
-        : (btnRect.bottom - wrapRect.top) + gap;
+      const margin = 16; // minimum distance from viewport edges
+      
+      // Target center relative to wrap
+      const targetCenterX = btnRect.left + (btnRect.width / 2) - wrapRect.left;
+      const targetCenterY = btnRect.top + (btnRect.height / 2) - wrapRect.top;
+      
+      // Determine optimal placement based on available space
+      const spaceAbove = targetCenterY - margin;
+      const spaceBelow = wrapRect.height - targetCenterY - margin;
+      const spaceLeft = targetCenterX - margin;
+      const spaceRight = wrapRect.width - targetCenterX - margin;
+      
+      let placement, left, top, arrowLeft, arrowTop;
+      
+      // Try vertical placements first (top/bottom)
+      if (spaceAbove >= ph + gap && spaceAbove >= spaceBelow) {
+        // Place above
+        placement = 'top';
+        top = targetCenterY - ph - gap;
+        left = Math.max(margin, Math.min(targetCenterX - pw / 2, wrapRect.width - pw - margin));
+        arrowLeft = targetCenterX - left;
+      } else if (spaceBelow >= ph + gap) {
+        // Place below
+        placement = 'bottom';
+        top = targetCenterY + gap;
+        left = Math.max(margin, Math.min(targetCenterX - pw / 2, wrapRect.width - pw - margin));
+        arrowLeft = targetCenterX - left;
+      } else if (spaceRight >= pw + gap) {
+        // Place to the right
+        placement = 'right';
+        left = targetCenterX + gap;
+        top = Math.max(margin, Math.min(targetCenterY - ph / 2, wrapRect.height - ph - margin));
+        arrowTop = targetCenterY - top;
+      } else if (spaceLeft >= pw + gap) {
+        // Place to the left
+        placement = 'left';
+        left = targetCenterX - pw - gap;
+        top = Math.max(margin, Math.min(targetCenterY - ph / 2, wrapRect.height - ph - margin));
+        arrowTop = targetCenterY - top;
+      } else {
+        // Fallback: place below with best fit
+        placement = 'bottom';
+        top = Math.min(targetCenterY + gap, wrapRect.height - ph - margin);
+        left = Math.max(margin, Math.min(targetCenterX - pw / 2, wrapRect.width - pw - margin));
+        arrowLeft = targetCenterX - left;
+      }
+      
+      // Pan viewport if popover would be clipped
+      panToKeepInView(left, top, pw, ph, targetCenterX, targetCenterY);
+      
       pop.style.left = `${left}px`;
       pop.style.top = `${top}px`;
-      pop.dataset.placement = preferTop ? 'top' : 'bottom';
+      pop.dataset.placement = placement;
+      
+      // Position arrow to point at target center
+      const arrow = pop.querySelector('.popover__arrow');
+      if (arrow) {
+        if (placement === 'top' || placement === 'bottom') {
+          arrow.style.left = `${Math.max(6, Math.min(arrowLeft - 6, pw - 18))}px`;
+          arrow.style.top = '';
+        } else {
+          arrow.style.top = `${Math.max(6, Math.min(arrowTop - 6, ph - 18))}px`;
+          arrow.style.left = '';
+        }
+      }
+      
       pop.style.visibility = '';
     }
 
@@ -246,6 +375,62 @@
       place(btn);
     }
 
+    function panToKeepInView(popLeft, popTop, popWidth, popHeight, targetX, targetY) {
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+      const wrapRect = wrap.getBoundingClientRect();
+      
+      // Calculate popover bounds in viewport coordinates
+      const popViewportLeft = wrapRect.left + popLeft;
+      const popViewportTop = wrapRect.top + popTop;
+      const popViewportRight = popViewportLeft + popWidth;
+      const popViewportBottom = popViewportTop + popHeight;
+      
+      // Calculate target position in viewport coordinates
+      const targetViewportX = wrapRect.left + targetX;
+      const targetViewportY = wrapRect.top + targetY;
+      
+      let scrollX = 0;
+      let scrollY = 0;
+      const buffer = 20; // padding from viewport edges
+      
+      // Check horizontal overflow
+      if (popViewportLeft < buffer) {
+        scrollX = popViewportLeft - buffer;
+      } else if (popViewportRight > viewportWidth - buffer) {
+        scrollX = popViewportRight - viewportWidth + buffer;
+      }
+      
+      // Check vertical overflow
+      if (popViewportTop < buffer) {
+        scrollY = popViewportTop - buffer;
+      } else if (popViewportBottom > viewportHeight - buffer) {
+        scrollY = popViewportBottom - viewportHeight + buffer;
+      }
+      
+      // Also ensure target remains visible
+      if (targetViewportX + scrollX < buffer) {
+        scrollX = buffer - targetViewportX;
+      } else if (targetViewportX + scrollX > viewportWidth - buffer) {
+        scrollX = viewportWidth - buffer - targetViewportX;
+      }
+      
+      if (targetViewportY + scrollY < buffer) {
+        scrollY = buffer - targetViewportY;
+      } else if (targetViewportY + scrollY > viewportHeight - buffer) {
+        scrollY = viewportHeight - buffer - targetViewportY;
+      }
+      
+      // Smooth scroll to keep both popover and target in view
+      if (scrollX !== 0 || scrollY !== 0) {
+        window.scrollBy({
+          left: scrollX,
+          top: scrollY,
+          behavior: 'smooth'
+        });
+      }
+    }
+    
     function close() {
       pop.setAttribute('aria-hidden', 'true');
       openFor = null;
